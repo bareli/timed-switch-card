@@ -10,68 +10,84 @@ const CIRC = 2 * Math.PI * 90;
 const STYLE = `
 :host { display: block; }
 ha-card {
-  background: linear-gradient(160deg, #0f1a2c, #070d18);
-  color: #e6ebf3;
-  border-radius: 26px;
+  display: block;
+  --a: var(--tsc-accent, #0ea5e9);
+  --a-soft: color-mix(in srgb, var(--a) 18%, transparent);
+  --a-ring: color-mix(in srgb, var(--a) 40%, transparent);
+  --a-light: color-mix(in srgb, var(--a) 55%, white);
+  --t: var(--tsc-text, #e6ebf3);
+  --m: var(--tsc-muted, #8a96aa);
+  background: var(--tsc-bg, linear-gradient(160deg, #0f1a2c, #070d18));
+  color: var(--t);
+  border-radius: var(--tsc-radius, 26px);
   padding: 16px;
-  box-shadow: 0 0 40px rgba(14,165,233,.18);
+  box-shadow: 0 0 40px color-mix(in srgb, var(--a) 18%, transparent);
   border: 1px solid rgba(255,255,255,.07);
   overflow: hidden;
 }
+ha-card.noglow { box-shadow: none; }
 .head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
 .ico {
   width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center;
-  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: #9aa6b8;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: var(--m);
 }
-.on .ico { color: #0ea5e9; box-shadow: 0 0 14px rgba(14,165,233,.5); }
+.on .ico { color: var(--a); box-shadow: 0 0 14px color-mix(in srgb, var(--a) 50%, transparent); }
+.noglow .on .ico { box-shadow: none; }
 .titles { flex: 1; min-width: 0; }
 .name { font-weight: 600; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.eid { font: 11px 'Roboto Mono', monospace; color: #7d8aa0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.eid { font: 11px 'Roboto Mono', monospace; color: var(--m); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pill {
   font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
-  background: rgba(255,255,255,.07); color: #aab4c4; display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.07); color: var(--m); display: flex; align-items: center; gap: 6px;
 }
-.pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #7d8aa0; }
-.on .pill { color: #7dd3fc; background: rgba(14,165,233,.15); }
-.on .pill::before { background: #0ea5e9; box-shadow: 0 0 6px #0ea5e9; }
-.ringwrap { position: relative; width: 100%; max-width: 280px; margin: 8px auto 0; aspect-ratio: 1; }
+.pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--m); }
+.on .pill { color: var(--a-light); background: var(--a-soft); }
+.on .pill::before { background: var(--a); box-shadow: 0 0 6px var(--a); }
+.noglow .on .pill::before { box-shadow: none; }
+.ringwrap { position: relative; width: 100%; max-width: var(--tsc-ring-size, 280px); margin: 8px auto 0; aspect-ratio: 1; }
 svg { width: 100%; height: 100%; touch-action: none; overflow: visible; }
-.track { fill: none; stroke: rgba(14,165,233,.35); stroke-width: 1.5; }
+.track { fill: none; stroke: var(--a-ring); stroke-width: 1.5; }
+.norings .track { display: none; }
 .arc {
-  fill: none; stroke: #0ea5e9; stroke-width: 13.5; stroke-linecap: round;
+  fill: none; stroke: var(--a); stroke-width: var(--tsc-arc-width, 13.5); stroke-linecap: round;
   stroke-dasharray: ${CIRC}; transform: rotate(-90deg); transform-origin: 100px 100px;
-  filter: drop-shadow(0 0 5px rgba(14,165,233,.8));
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--a) 80%, transparent));
 }
-.knob { fill: #0ea5e9; filter: drop-shadow(0 0 6px rgba(14,165,233,.9)); cursor: grab; }
+.noglow .arc, .noglow .knob { filter: none; }
+.knob { fill: var(--a); filter: drop-shadow(0 0 6px color-mix(in srgb, var(--a) 90%, transparent)); cursor: grab; }
 .center {
   position: absolute; inset: 0; display: flex; flex-direction: column;
   align-items: center; justify-content: center; pointer-events: none;
 }
-.lbl { font-size: 12px; letter-spacing: .08em; font-weight: 600; color: #8a96aa; }
+.lbl { font-size: 12px; letter-spacing: .08em; font-weight: 600; color: var(--m); }
 .time { font: 600 44px 'Roboto Mono', monospace; line-height: 1.15; }
-.sub { font-size: 13px; color: #8a96aa; }
+.sub { font-size: 13px; color: var(--m); }
 .play {
   pointer-events: auto; margin-top: 8px; width: 44px; height: 44px; border: 0; border-radius: 50%;
-  background: transparent; color: #8a96aa; cursor: pointer; display: grid; place-items: center;
+  background: transparent; color: var(--m); cursor: pointer; display: grid; place-items: center;
 }
-.play:hover { color: #0ea5e9; }
+.play:hover { color: var(--a); }
 .play ha-icon { --mdc-icon-size: 34px; }
-.running .play { color: #0ea5e9; }
+.running .play { color: var(--a); }
 .chips { display: flex; gap: 10px; margin: 16px 0 12px; }
 .chip {
   flex: 1; padding: 12px 0; border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer;
-  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); color: #d5dbe6;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); color: var(--t);
 }
-.chip.sel { border-color: #0ea5e9; background: rgba(14,165,233,.18); color: #7dd3fc; }
+.chip.sel { border-color: var(--a); background: var(--a-soft); color: var(--a-light); }
 .chip:disabled { opacity: .4; cursor: default; }
 .foot {
-  display: flex; align-items: center; gap: 8px; padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,.08); font: 14px 'Roboto Mono', monospace; color: #8a96aa;
+  display: flex; align-items: center; gap: 8px; padding-top: 12px; margin-top: 12px;
+  border-top: 1px solid rgba(255,255,255,.08); font: 14px 'Roboto Mono', monospace; color: var(--m);
 }
-.foot .v { color: #e6ebf3; }
+.chips + .foot { margin-top: 0; }
+.foot .v { color: var(--t); }
 .foot .pw { margin-left: auto; }
 .foot ha-icon { --mdc-icon-size: 20px; }
+[hidden] { display: none !important; }
 `;
+
+const toColor = (v) => (Array.isArray(v) ? `rgb(${v[0]},${v[1]},${v[2]})` : v);
 
 const fmt = (sec) => {
   sec = Math.max(0, Math.round(sec));
@@ -90,7 +106,7 @@ const hms = (sec) => {
 class TimedSwitchCard extends HTMLElement {
   setConfig(config) {
     if (!config.entity) throw new Error("entity is required");
-    this._c = { presets: [5, 15, 30, 60], max: 60, step: 1, default: 15, ...config };
+    this._c = { presets: [5, 15, 30, 60], max: 60, step: 1, default: 15, arc_width: 13.5, ...config };
     this._dur = this._c.default;
     this._built = false;
     this._end = null;
@@ -276,7 +292,7 @@ class TimedSwitchCard extends HTMLElement {
 
   _build() {
     this._built = true;
-    this.attachShadow({ mode: "open" });
+    if (!this.shadowRoot) this.attachShadow({ mode: "open" });
     const chips = this._c.presets
       .map(Number)
       .filter((m) => m > 0)
@@ -318,7 +334,9 @@ class TimedSwitchCard extends HTMLElement {
       root: $(".root"), icon: $(".ico ha-icon"), name: $(".name"), eid: $(".eid"), pill: $(".pill"),
       arc: $(".arc"), knob: $(".knob"), lbl: $(".lbl"), time: $(".time"), sub: $(".sub"),
       playIcon: $(".play ha-icon"), auto: $(".auto"), pw: $(".pw"), svg: $("svg"),
+      head: $(".head"), chips: $(".chips"), foot: $(".foot"),
     };
+    this._applyStyle();
     $(".play").addEventListener("click", () => this._toggleRun());
     this.shadowRoot.querySelectorAll(".chip").forEach((b) =>
       b.addEventListener("click", () => {
@@ -348,6 +366,26 @@ class TimedSwitchCard extends HTMLElement {
     svg.addEventListener("pointermove", (e) => this._drag && move(e));
     svg.addEventListener("pointerup", () => (this._drag = false));
     svg.addEventListener("pointercancel", () => (this._drag = false));
+  }
+
+  _applyStyle() {
+    const c = this._c;
+    const card = this.shadowRoot.querySelector("ha-card");
+    const set = (k, v) => (v === undefined || v === null || v === "" ? card.style.removeProperty(k) : card.style.setProperty(k, v));
+    set("--tsc-accent", toColor(c.accent_color));
+    set("--tsc-text", toColor(c.text_color));
+    set("--tsc-muted", toColor(c.muted_color));
+    set("--tsc-bg", c.background);
+    set("--tsc-radius", c.border_radius != null ? `${Number(c.border_radius)}px` : null);
+    set("--tsc-arc-width", Number(c.arc_width) || 13.5);
+    set("--tsc-ring-size", c.ring_size != null ? `${Number(c.ring_size)}px` : null);
+    card.classList.toggle("noglow", c.glow === false);
+    card.classList.toggle("norings", c.show_rings === false);
+    this._el.knob.setAttribute("r", Math.max(6, (Number(c.arc_width) || 13.5) * 0.8));
+    this._el.head.hidden = c.show_header === false;
+    this._el.eid.hidden = c.show_entity_id === false;
+    this._el.chips.hidden = c.show_presets === false;
+    this._el.foot.hidden = c.show_footer === false;
   }
 
   _render() {
@@ -407,6 +445,19 @@ class TimedSwitchCardEditor extends HTMLElement {
         { name: "timer_entity", label: "Existing timer helper (optional, auto-created if empty)", selector: { entity: { domain: "timer" } } },
         { name: "max", label: "Max minutes (ring full scale)", selector: { number: { min: 5, max: 1440, mode: "box" } } },
         { name: "default", label: "Default minutes", selector: { number: { min: 1, max: 1440, mode: "box" } } },
+        { name: "accent_color", label: "Accent color", selector: { color_rgb: {} } },
+        { name: "text_color", label: "Text color", selector: { color_rgb: {} } },
+        { name: "muted_color", label: "Secondary text color", selector: { color_rgb: {} } },
+        { name: "background", label: "Background (any CSS, e.g. #101820 or a gradient)", selector: { text: {} } },
+        { name: "border_radius", label: "Corner radius (px)", selector: { number: { min: 0, max: 60, mode: "slider" } } },
+        { name: "arc_width", label: "Progress bar thickness", selector: { number: { min: 3, max: 20, step: 0.5, mode: "slider" } } },
+        { name: "ring_size", label: "Ring size (px, max)", selector: { number: { min: 140, max: 500, mode: "slider" } } },
+        { name: "glow", label: "Glow", selector: { boolean: {} } },
+        { name: "show_rings", label: "Show thin ring lines", selector: { boolean: {} } },
+        { name: "show_header", label: "Show header", selector: { boolean: {} } },
+        { name: "show_entity_id", label: "Show entity id", selector: { boolean: {} } },
+        { name: "show_presets", label: "Show preset buttons", selector: { boolean: {} } },
+        { name: "show_footer", label: "Show footer", selector: { boolean: {} } },
       ];
       this._form.addEventListener("value-changed", (e) =>
         this.dispatchEvent(new CustomEvent("config-changed", { detail: { config: e.detail.value }, bubbles: true, composed: true }))

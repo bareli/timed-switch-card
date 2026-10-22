@@ -21,6 +21,21 @@ max: 60                       # ring full scale, minutes
 step: 1
 default: 15
 timer_entity: timer.sprinkler # optional, only to reuse your own timer
+
+# look (all optional)
+accent_color: "#0ea5e9"       # or [14, 165, 233]
+text_color: "#e6ebf3"
+muted_color: "#8a96aa"
+background: "linear-gradient(160deg, #0f1a2c, #070d18)"  # any CSS background
+border_radius: 26             # px
+arc_width: 13.5               # progress bar thickness
+ring_size: 280                # px, max ring diameter
+glow: true
+show_rings: true              # thin ring lines
+show_header: true
+show_entity_id: true
+show_presets: true
+show_footer: true
 ```
 
 Supports `switch`, `input_boolean`, `light`, `fan`, `cover`, `valve` and anything `homeassistant.turn_on/off` handles.
