@@ -509,10 +509,9 @@ class TimedSwitchZone extends HTMLElement {
     d = Math.round(d);
     this._buzz();
     if (this._inTimerMode()) {
-      this._hass.callService("timer", "change", {
-        entity_id: this._timerId,
-        duration: `${d < 0 ? "-" : ""}${hms(Math.abs(d))}`,
-      });
+      // timer.change cannot exceed the timer's configured duration, so restart it with the new remaining time
+      this._total = Math.round(rem + d);
+      this._hass.callService("timer", "start", { entity_id: this._timerId, duration: hms(this._total) });
     } else {
       this._total += d;
       this._persist();

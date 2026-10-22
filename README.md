@@ -73,4 +73,4 @@ Edit multi-zone cards in YAML.
 ## Notes and limits
 - "Last ran" and remembered duration are stored per browser, not in Home Assistant.
 - The finish animation, vibration and beep only fire in a browser that has the card open; `notify` is the server-side alternative.
-- Extending a running timer uses `timer.change` with a signed duration.
+- Extending or shortening a running timer restarts it with the new remaining time (`timer.change` cannot exceed the timer's original duration).
