@@ -38,7 +38,7 @@ ha-card {
 svg { width: 100%; height: 100%; touch-action: none; overflow: visible; }
 .track { fill: none; stroke: rgba(14,165,233,.35); stroke-width: 1.5; }
 .arc {
-  fill: none; stroke: #0ea5e9; stroke-width: 10; stroke-linecap: round;
+  fill: none; stroke: #0ea5e9; stroke-width: 13.5; stroke-linecap: round;
   stroke-dasharray: ${CIRC}; transform: rotate(-90deg); transform-origin: 100px 100px;
   filter: drop-shadow(0 0 5px rgba(14,165,233,.8));
 }
@@ -293,10 +293,10 @@ class TimedSwitchCard extends HTMLElement {
           </div>
           <div class="ringwrap">
             <svg viewBox="0 0 200 200">
-              <circle class="track" cx="100" cy="100" r="98.5"/>
-              <circle class="track" cx="100" cy="100" r="81.5"/>
+              <circle class="track" cx="100" cy="100" r="96"/>
+              <circle class="track" cx="100" cy="100" r="84"/>
               <circle class="arc" cx="100" cy="100" r="90"/>
-              <circle class="knob" r="12"/>
+              <circle class="knob" r="11"/>
             </svg>
             <div class="center">
               <div class="lbl"></div>
