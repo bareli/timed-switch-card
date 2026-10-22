@@ -5,7 +5,7 @@ const SERVICES = {
   valve: ["valve", "open_valve", "close_valve"],
 };
 
-const CIRC = 2 * Math.PI * 88;
+const CIRC = 2 * Math.PI * 90;
 
 const STYLE = `
 :host { display: block; }
@@ -38,7 +38,7 @@ ha-card {
 svg { width: 100%; height: 100%; touch-action: none; overflow: visible; }
 .track { fill: none; stroke: rgba(14,165,233,.35); stroke-width: 1.5; }
 .arc {
-  fill: none; stroke: #0ea5e9; stroke-width: 7; stroke-linecap: round;
+  fill: none; stroke: #0ea5e9; stroke-width: 12; stroke-linecap: round;
   stroke-dasharray: ${CIRC}; transform: rotate(-90deg); transform-origin: 100px 100px;
   filter: drop-shadow(0 0 5px rgba(14,165,233,.8));
 }
@@ -293,10 +293,10 @@ class TimedSwitchCard extends HTMLElement {
           </div>
           <div class="ringwrap">
             <svg viewBox="0 0 200 200">
-              <circle class="track" cx="100" cy="100" r="96"/>
-              <circle class="track" cx="100" cy="100" r="80"/>
-              <circle class="arc" cx="100" cy="100" r="88"/>
-              <circle class="knob" r="11"/>
+              <circle class="track" cx="100" cy="100" r="97"/>
+              <circle class="track" cx="100" cy="100" r="83"/>
+              <circle class="arc" cx="100" cy="100" r="90"/>
+              <circle class="knob" r="12"/>
             </svg>
             <div class="center">
               <div class="lbl"></div>
@@ -367,8 +367,8 @@ class TimedSwitchCard extends HTMLElement {
     el.eid.textContent = this._c.entity;
     el.pill.textContent = on ? "ON" : "OFF";
     el.arc.style.strokeDashoffset = CIRC * (1 - Math.min(frac, 0.9999));
-    el.knob.setAttribute("cx", 100 + 88 * Math.sin(ang));
-    el.knob.setAttribute("cy", 100 - 88 * Math.cos(ang));
+    el.knob.setAttribute("cx", 100 + 90 * Math.sin(ang));
+    el.knob.setAttribute("cy", 100 - 90 * Math.cos(ang));
     el.lbl.textContent = running ? "REMAINING" : "SET DURATION";
     el.time.textContent = running ? fmt(remaining) : fmt(this._dur * 60);
     el.sub.textContent = running ? "until auto-off" : "minutes set";
