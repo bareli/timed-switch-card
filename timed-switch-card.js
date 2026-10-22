@@ -82,6 +82,11 @@ const fmt = (sec) => {
   return h ? `${h}:${p(m)}:${p(s)}` : `${p(m)}:${p(s)}`;
 };
 
+const hms = (sec) => {
+  const p = (n) => String(n).padStart(2, "0");
+  return `${p(Math.floor(sec / 3600))}:${p(Math.floor((sec % 3600) / 60))}:${p(sec % 60)}`;
+};
+
 class TimedSwitchCard extends HTMLElement {
   setConfig(config) {
     if (!config.entity) throw new Error("entity is required");
@@ -91,6 +96,8 @@ class TimedSwitchCard extends HTMLElement {
     this._end = null;
     this._total = 0;
     this._wasActive = false;
+    this._setup = null;
+    this._slug = `tsc_${config.entity.replace(".", "_")}`;
   }
 
   static getConfigElement() {
@@ -123,7 +130,50 @@ class TimedSwitchCard extends HTMLElement {
   }
 
   get _timerObj() {
-    return this._c.timer_entity ? this._hass.states[this._c.timer_entity] : null;
+    return this._hass.states[this._timerId] || null;
+  }
+
+  get _timerId() {
+    return this._c.timer_entity || `timer.${this._slug}`;
+  }
+
+  async _ensureHelpers() {
+    if (this._timerObj) return true;
+    if (this._c.timer_entity || !this._hass.user?.is_admin) return false;
+    if (!this._setup) {
+      this._setup = this._createHelpers().then(
+        () => true,
+        () => false
+      );
+    }
+    return this._setup;
+  }
+
+  async _createHelpers() {
+    const h = this._hass;
+    const slug = this._slug;
+    const timerId = `timer.${slug}`;
+    if (!h.states[timerId]) {
+      await h.callWS({ type: "timer/create", name: slug, icon: "mdi:timer-outline", duration: "00:15:00" });
+    }
+    const exists = Object.values(h.states).some(
+      (st) => st.entity_id.startsWith("automation.") && st.attributes.id === slug
+    );
+    if (!exists) {
+      const [d, , offSvc] = this._services();
+      await h.callApi("POST", `config/automation/config/${slug}`, {
+        alias: `Timed Switch Card auto-off: ${this._c.entity}`,
+        description: "Created by timed-switch-card. Turns the entity off when its timer finishes.",
+        mode: "single",
+        trigger: [{ platform: "event", event_type: "timer.finished", event_data: { entity_id: timerId } }],
+        action: [{ service: `${d}.${offSvc}`, target: { entity_id: this._c.entity } }],
+      });
+      await h.callService("automation", "reload");
+    }
+  }
+
+  _services() {
+    return SERVICES[this._c.entity.split(".")[0]] || ["homeassistant", "turn_on", "turn_off"];
   }
 
   get _isOn() {
@@ -195,22 +245,21 @@ class TimedSwitchCard extends HTMLElement {
   }
 
   _power(on) {
-    const entity = this._c.entity;
-    const domain = entity.split(".")[0];
-    const [d, onSvc, offSvc] = SERVICES[domain] || ["homeassistant", "turn_on", "turn_off"];
-    this._hass.callService(d, on ? onSvc : offSvc, { entity_id: entity });
+    const [d, onSvc, offSvc] = this._services();
+    this._hass.callService(d, on ? onSvc : offSvc, { entity_id: this._c.entity });
   }
 
-  _toggleRun() {
+  async _toggleRun() {
     if (this._running) {
-      if (this._c.timer_entity) this._hass.callService("timer", "cancel", { entity_id: this._c.timer_entity });
+      if (this._timerObj) this._hass.callService("timer", "cancel", { entity_id: this._timerId });
       this._clear();
       this._power(false);
     } else {
       const sec = this._dur * 60;
+      const useTimer = await this._ensureHelpers();
       this._power(true);
-      if (this._c.timer_entity) {
-        this._hass.callService("timer", "start", { entity_id: this._c.timer_entity, duration: fmt(sec).length === 5 ? `00:${fmt(sec)}` : fmt(sec) });
+      if (useTimer) {
+        this._hass.callService("timer", "start", { entity_id: this._timerId, duration: hms(sec) });
       } else {
         this._end = Date.now() + sec * 1000;
         this._total = sec;
@@ -355,7 +404,7 @@ class TimedSwitchCardEditor extends HTMLElement {
         { name: "name", label: "Name", selector: { text: {} } },
         { name: "icon", label: "Icon", selector: { icon: {} } },
         { name: "power_entity", label: "Power sensor (optional)", selector: { entity: { domain: "sensor" } } },
-        { name: "timer_entity", label: "Timer helper (optional, survives browser close)", selector: { entity: { domain: "timer" } } },
+        { name: "timer_entity", label: "Existing timer helper (optional, auto-created if empty)", selector: { entity: { domain: "timer" } } },
         { name: "max", label: "Max minutes (ring full scale)", selector: { number: { min: 5, max: 1440, mode: "box" } } },
         { name: "default", label: "Default minutes", selector: { number: { min: 1, max: 1440, mode: "box" } } },
       ];
