@@ -391,7 +391,7 @@ class TimedSwitchZone extends HTMLElement {
   }
 
   _notifyMsg() {
-    return this._t.notify.replace("{name}", this._displayName);
+    return this._t.notify.replace("{name}", String(this._displayName).replace(/[{}]/g, ""));
   }
 
   _notifyLocal() {
