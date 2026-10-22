@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timed Switch Card ל-Home Assistant</title>
+<meta name="description" content="כרטיס Lovelace שמדליק כל מתג, תאורה או ברז לזמן שבחרתם ומכבה אותו בשרת. מוכן ל-HACS, בלי הגדרות.">
+<meta property="og:title" content="Timed Switch Card ל-Home Assistant">
+<meta property="og:image" content="https://bareli.github.io/timed-switch-card/img/card-hebrew.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <strong>Timed Switch Card</strong>
+    <nav>
+      <a href="#install">התקנה</a>
+      <a href="#config">הגדרות</a>
+      <a href="#how">איך זה עובד</a>
+      <a href="#faq">שאלות נפוצות</a>
+      <a href="index.html">English</a>
+      <a href="https://github.com/bareli/timed-switch-card">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <h1>מדליקים לזמן קצוב. הוא מכבה את עצמו.</h1>
+      <p class="lead">כרטיס ללוח הבקרה של Home Assistant, למתזים, דודים, משאבות, תאורה וכל דבר שרוצים להפעיל לזמן מוגבל. בוחרים ישות ולוחצים על play. הכיבוי רץ בשרת Home Assistant, ולכן אפשר לסגור את הדפדפן.</p>
+      <div class="btns">
+        <a class="btn primary" href="#install">התקנה דרך HACS</a>
+        <a class="btn ghost" href="https://github.com/bareli/timed-switch-card">GitHub</a>
+      </div>
+    </div>
+    <img src="img/card-hebrew.png" alt="הכרטיס בעברית עם משך של 15 דקות">
+  </div>
+</div>
+
+<main class="wrap">
+
+<section>
+  <h2>מה מקבלים</h2>
+  <div class="grid">
+    <div class="card"><h3>בלי הגדרות</h3><p>בוחרים ישות. בלחיצה הראשונה של מנהל מערכת הכרטיס יוצר בעצמו טיימר ואוטומציית כיבוי. אין צורך לכתוב YAML.</p></div>
+    <div class="card"><h3>כיבוי בצד השרת</h3><p>הטיימר חי ב-Home Assistant, שורד הפעלה מחדש ומסונכרן בין כל הלוחות והטלפונים.</p></div>
+    <div class="card"><h3>מהיר לשימוש</h3><p>גוררים את הטבעת, לוחצים על 5, 15, 30 או 60 דקות, או מקלידים ערך מותאם. אפשר להאריך או לקצר בזמן הריצה.</p></div>
+    <div class="card"><h3>בטוח</h3><p>תקרת הרצה אופציונלית (<code>max_run</code>), אזהרה גלויה כשהפעלה תלויה בלשונית פתוחה, והתראה בסיום.</p></div>
+    <div class="card"><h3>לא רק מתגים</h3><p>עובד עם <code>switch</code>, <code>input_boolean</code>, <code>light</code>, <code>fan</code>, <code>cover</code>, <code>valve</code> וגם עם ישויות מספריות, כולל החזרת הערך הקודם.</p></div>
+    <div class="card"><h3>בעיצוב שלכם</h3><p>ערכת נושא בהירה וכהה, צבעים, עובי הפס, גדלים, עברית עם פריסה מימין לשמאל, והסתרה של כל חלק בכרטיס.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>צילומי מסך</h2>
+  <div class="shots">
+    <figure><img src="img/card-hebrew.png" alt="עברית" loading="lazy"><figcaption>עברית, מימין לשמאל</figcaption></figure>
+    <figure><img src="img/card-running.png" alt="בזמן ריצה" loading="lazy"><figcaption>בזמן ריצה, עם כפתורי הארכה וקיצור</figcaption></figure>
+    <figure><img src="img/card-light.png" alt="ערכת נושא בהירה" loading="lazy"><figcaption>ערכת נושא בהירה</figcaption></figure>
+    <figure><img src="img/card-zones.png" alt="כמה אזורים" loading="lazy"><figcaption>כמה אזורים בכרטיס אחד</figcaption></figure>
+  </div>
+</section>
+
+<section id="install">
+  <h2>התקנה</h2>
+  <ol class="steps">
+    <li><strong>מוסיפים את המאגר.</strong> ב-HACS פותחים את התפריט, <em>Custom repositories</em>, ומוסיפים <code>bareli/timed-switch-card</code> מסוג <strong>Dashboard</strong>.</li>
+    <li><strong>מורידים.</strong> מחפשים <em>Timed Switch Card</em> ב-HACS ולוחצים <em>Download</em>. HACS רושם את המשאב <code>/hacsfiles/timed-switch-card/timed-switch-card.js</code>. אם לא, מוסיפים אותו ב: הגדרות, לוחות בקרה, משאבים, כמודול JavaScript.</li>
+    <li><strong>מרעננים את הדפדפן.</strong> רענון מלא (Ctrl+F5) כדי לטעון את הקובץ החדש.</li>
+    <li><strong>מוסיפים את הכרטיס.</strong> עורכים לוח בקרה, <em>Add card</em>, מחפשים <em>Timed Switch Card</em> ובוחרים ישות.</li>
+    <li><strong>לוחצים play פעם אחת כמנהל מערכת.</strong> זה יוצר את הטיימר ואת אוטומציית הכיבוי. מאותו רגע לכל המשתמשים יש כיבוי בצד השרת.</li>
+  </ol>
+</section>
+
+<section id="config">
+  <h2>הגדרות</h2>
+  <p>העורך החזותי כולל את כל האפשרויות. ב-YAML המינימום הוא:</p>
+  <pre><code>type: custom:timed-switch-card
+entity: switch.garden_lawn_sprinkler</code></pre>
+  <p>דוגמה מלאה יותר, עם ממשק בעברית:</p>
+<pre><code>type: custom:timed-switch-card
+entity: switch.garden_lawn_sprinkler
+name: מזרקת גינה
+language: he
+presets: [5, 15, 30, 60]
+max_run: 120
+notify: notify.mobile_app_phone</code></pre>
+
+  <table>
+    <tr><th>אפשרות</th><th>ברירת מחדל</th><th>משמעות</th></tr>
+    <tr><td><code>entity</code></td><td>חובה</td><td>הישות לשליטה.</td></tr>
+    <tr><td><code>name</code>, <code>icon</code></td><td>מהישות</td><td>שם וסמל מותאמים.</td></tr>
+    <tr><td><code>power_entity</code></td><td></td><td>חיישן שמוצג בתחתית, למשל צריכת חשמל.</td></tr>
+    <tr><td><code>presets</code></td><td><code>[5, 15, 30, 60]</code></td><td>כפתורי זמן מוכן, בדקות.</td></tr>
+    <tr><td><code>max_run</code></td><td>1440</td><td>תקרת בטיחות: ההרצה הארוכה ביותר המותרת, גם בהקלדה ובהארכה.</td></tr>
+    <tr><td><code>extend_step</code></td><td>5</td><td>צעד ההארכה והקיצור בדקות.</td></tr>
+    <tr><td><code>timer_entity</code></td><td>נוצר אוטומטית</td><td>שימוש בטיימר שלכם. אתם אחראים לאוטומציית הכיבוי.</td></tr>
+    <tr><td><code>notify</code></td><td></td><td>שירות התראה שהאוטומציה קוראת לו בסיום.</td></tr>
+    <tr><td><code>on_value</code>, <code>off_value</code></td><td>מקסימום הישות, <code>previous</code></td><td>לישויות מספריות: הערך בזמן ההרצה והערך אחריה.</td></tr>
+    <tr><td><code>theme</code></td><td><code>auto</code></td><td><code>auto</code>, <code>dark</code> או <code>light</code>.</td></tr>
+    <tr><td><code>language</code></td><td><code>auto</code></td><td><code>en</code> או <code>he</code>.</td></tr>
+    <tr><td><code>accent_color</code></td><td><code>#0ea5e9</code></td><td>צבע הדגשה, מחרוזת hex או <code>[r, g, b]</code>.</td></tr>
+    <tr><td><code>arc_width</code></td><td>13.5</td><td>עובי פס ההתקדמות.</td></tr>
+  </table>
+  <p>רשימת כל האפשרויות, כולל הסתרת חלקים בכרטיס, נמצאת ב<a href="index.html#config">עמוד האנגלית</a>.</p>
+
+  <h3>כמה אזורים בכרטיס אחד</h3>
+<pre><code>type: custom:timed-switch-card
+entities:
+  - switch.front_lawn
+  - entity: switch.back_lawn
+    name: אחורי
+accent_color: "#22c55e"</code></pre>
+</section>
+
+<section id="how">
+  <h2>איך הכיבוי עובד</h2>
+  <p>כשמנהל מערכת לוחץ play על ישות בפעם הראשונה, הכרטיס יוצר ב-Home Assistant שני דברים:</p>
+  <ul>
+    <li>עוזר מסוג <code>timer</code> בשם <code>timer.tsc_&lt;domain&gt;_&lt;object_id&gt;</code></li>
+    <li>אוטומציה <code>tsc_&lt;domain&gt;_&lt;object_id&gt;</code> שמריצה את פעולת הכיבוי כשהטיימר מסתיים</li>
+  </ul>
+  <p>לחיצה על play מדליקה את הישות ומתחילה את הטיימר. הארכה או קיצור מפעילים את הטיימר מחדש עם הזמן החדש. כשהטיימר מסתיים, האוטומציה מכבה את הישות ושולחת התראה אם הוגדרה. הכרטיס רק מציג את הספירה לאחור, ולכן סגירתו לא משנה דבר.</p>
+  <div class="note"><strong>משתמשים שאינם מנהלים.</strong> הם לא יכולים ליצור עוזרים. אחרי שמנהל לחץ play על הישות, הם משתמשים בטיימר הקיים ומקבלים אותה התנהגות בצד השרת. עד אז ההפעלה שלהם בדפדפן בלבד והכרטיס מציג אזהרה.</div>
+  <p>כדי להסיר הכול, מוחקים את הטיימר ואת האוטומציה בהגדרות. הכרטיס ייצור אותם שוב בפעם הבאה שמנהל לוחץ play.</p>
+</section>
+
+<section id="faq">
+  <h2>שאלות נפוצות</h2>
+  <details><summary>הכרטיס כותב "Custom element doesn't exist"</summary><p>קובץ ה-JavaScript לא נטען. בודקים בהגדרות, לוחות בקרה, משאבים שקיים <code>/hacsfiles/timed-switch-card/timed-switch-card.js</code> ומרעננים את הדפדפן במלואו.</p></details>
+  <details><summary>מופיעה אזהרה כתומה "טיימר בדפדפן בלבד"</summary><p>ההפעלה לא נתמכת בטיימר של השרת. או שהמשתמש אינו מנהל ועדיין אין עוזר, או שיצירת העוזר נכשלה. לוחצים play פעם אחת כמנהל, ומאותו רגע Home Assistant יכבה את הישות גם אם הלשונית נסגרת.</p></details>
+  <details><summary>הכיבוי קרה כשלא ציפיתי לו</summary><p>האוטומציה רצה בכל פעם שהטיימר מסתיים. אם משתמשים בטיימר משלכם דרך <code>timer_entity</code>, כל דבר אחר שמפעיל אותו יפעיל גם את הכיבוי. מומלץ להשתמש בטיימר ייעודי לכרטיס.</p></details>
+  <details><summary>האם "הופעל לאחרונה" מציג הפעלות ממכשירים אחרים?</summary><p>לא. הוא והזמן האחרון שנבחר נשמרים בדפדפן שהתחיל את ההפעלה.</p></details>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Timed Switch Card ברישיון MIT. <a href="https://github.com/bareli/timed-switch-card">קוד ודיווח על תקלות ב-GitHub</a>.
+  </div>
+</footer>
+</body>
+</html>

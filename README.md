@@ -2,6 +2,14 @@
 
 Lovelace card: pick a duration (drag the ring, tap a preset, or type a custom value), press play, the entity turns on and turns itself off when time ends.
 
+**Documentation: https://bareli.github.io/timed-switch-card** ([עברית](https://bareli.github.io/timed-switch-card/he.html))
+
+<p>
+  <img src="https://raw.githubusercontent.com/bareli/timed-switch-card/master/docs/img/card-dark.png" width="230" alt="Dark theme">
+  <img src="https://raw.githubusercontent.com/bareli/timed-switch-card/master/docs/img/card-running.png" width="230" alt="Running with extend buttons">
+  <img src="https://raw.githubusercontent.com/bareli/timed-switch-card/master/docs/img/card-light.png" width="230" alt="Light theme">
+</p>
+
 ## Install (HACS)
 1. HACS > Custom repositories > add `bareli/timed-switch-card`, type **Dashboard**.
 2. Install, then add resource `/hacsfiles/timed-switch-card/timed-switch-card.js` (JavaScript module) if HACS did not.

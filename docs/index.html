@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timed Switch Card for Home Assistant</title>
+<meta name="description" content="A Lovelace card that turns any switch, light or valve on for a chosen time, then turns it off on the server. HACS ready, zero setup.">
+<meta property="og:title" content="Timed Switch Card for Home Assistant">
+<meta property="og:description" content="Pick a duration, press play, and the entity turns itself off on time, even if your browser is closed.">
+<meta property="og:image" content="https://bareli.github.io/timed-switch-card/img/card-dark.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <strong>Timed Switch Card</strong>
+    <nav>
+      <a href="#install">Install</a>
+      <a href="#config">Configuration</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+      <a href="he.html">עברית</a>
+      <a href="https://github.com/bareli/timed-switch-card">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <h1>Turn it on for a set time. It turns itself off.</h1>
+      <p class="lead">A Home Assistant dashboard card for sprinklers, heaters, pumps, lights and anything else you want to run for a limited time. Pick the entity, press play. The shut-off runs on your Home Assistant server, so the browser can be closed.</p>
+      <div class="btns">
+        <a class="btn primary" href="#install">Install with HACS</a>
+        <a class="btn ghost" href="https://github.com/bareli/timed-switch-card">View on GitHub</a>
+      </div>
+    </div>
+    <img src="img/card-dark.png" alt="Timed Switch Card showing a 15 minute duration for a garden sprinkler">
+  </div>
+</div>
+
+<main class="wrap">
+
+<section>
+  <h2>What you get</h2>
+  <div class="grid">
+    <div class="card"><h3>Zero setup</h3><p>Select the entity. The card creates its own timer helper and auto-off automation the first time an admin presses play. Nothing to write in YAML.</p></div>
+    <div class="card"><h3>Server-side shut-off</h3><p>The timer lives in Home Assistant, survives restarts and stays in sync across every dashboard and phone.</p></div>
+    <div class="card"><h3>Fast to use</h3><p>Drag the ring, tap 5, 15, 30 or 60 minutes, or type a custom value. Extend or shorten while it runs.</p></div>
+    <div class="card"><h3>Safe</h3><p>Optional <code>max_run</code> cap, a visible warning when a run depends on an open tab, and a notification when it finishes.</p></div>
+    <div class="card"><h3>Not only switches</h3><p>Works with <code>switch</code>, <code>input_boolean</code>, <code>light</code>, <code>fan</code>, <code>cover</code>, <code>valve</code>, and number entities with value restore.</p></div>
+    <div class="card"><h3>Yours to style</h3><p>Light and dark themes, colors, bar thickness, sizes, Hebrew with right-to-left layout, and show or hide any section.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Screenshots</h2>
+  <div class="shots">
+    <figure><img src="img/card-dark.png" alt="Dark theme" loading="lazy"><figcaption>Dark theme, ready to start</figcaption></figure>
+    <figure><img src="img/card-running.png" alt="Running with extend buttons" loading="lazy"><figcaption>Running, with extend and shorten buttons</figcaption></figure>
+    <figure><img src="img/card-light.png" alt="Light theme" loading="lazy"><figcaption>Light theme (follows Home Assistant)</figcaption></figure>
+    <figure><img src="img/card-custom.png" alt="Custom colors" loading="lazy"><figcaption>Custom colors, thin bar, no rings</figcaption></figure>
+    <figure><img src="img/card-zones.png" alt="Multiple zones with tabs" loading="lazy"><figcaption>Several zones in one card</figcaption></figure>
+    <figure><img src="img/card-number.png" alt="Number entity" loading="lazy"><figcaption>Number entity, value restored after</figcaption></figure>
+    <figure><img src="img/card-hebrew.png" alt="Hebrew right-to-left" loading="lazy"><figcaption>Hebrew, right-to-left</figcaption></figure>
+    <figure><img src="img/card-warning.png" alt="Browser-only warning" loading="lazy"><figcaption>Warning when a run needs the open tab</figcaption></figure>
+  </div>
+</section>
+
+<section id="install">
+  <h2>Install</h2>
+  <ol class="steps">
+    <li><strong>Add the repository.</strong> In Home Assistant open HACS, menu, <em>Custom repositories</em>. Add <code>bareli/timed-switch-card</code> with type <strong>Dashboard</strong>.</li>
+    <li><strong>Download it.</strong> Find <em>Timed Switch Card</em> in HACS and press <em>Download</em>. HACS registers the resource <code>/hacsfiles/timed-switch-card/timed-switch-card.js</code>. If it did not, add it under Settings, Dashboards, Resources as a JavaScript module.</li>
+    <li><strong>Reload the browser.</strong> Hard refresh (Ctrl+F5) so the new file loads.</li>
+    <li><strong>Add the card.</strong> Edit a dashboard, <em>Add card</em>, search for <em>Timed Switch Card</em>, pick your entity.</li>
+    <li><strong>Press play once as an admin.</strong> This creates the timer helper and the auto-off automation. After that every user gets server-side auto-off.</li>
+  </ol>
+  <p>Manual install: copy <code>timed-switch-card.js</code> to <code>/config/www/</code> and add the resource <code>/local/timed-switch-card.js</code>.</p>
+</section>
+
+<section id="config">
+  <h2>Configuration</h2>
+  <p>The visual editor covers every option. In YAML the minimum is:</p>
+  <pre><code>type: custom:timed-switch-card
+entity: switch.garden_lawn_sprinkler</code></pre>
+  <p>A fuller example:</p>
+<pre><code>type: custom:timed-switch-card
+entity: switch.garden_lawn_sprinkler
+name: Garden Sprinkler
+power_entity: sensor.sprinkler_power
+presets: [5, 15, 30, 60]
+max: 60
+max_run: 120
+default: 15
+extend_step: 5
+notify: notify.mobile_app_phone
+theme: auto
+accent_color: "#0ea5e9"</code></pre>
+
+  <h3>Behavior</h3>
+  <table>
+    <tr><th>Option</th><th>Default</th><th>Meaning</th></tr>
+    <tr><td><code>entity</code></td><td>required</td><td>Entity to control.</td></tr>
+    <tr><td><code>name</code>, <code>icon</code></td><td>from entity</td><td>Title and icon override.</td></tr>
+    <tr><td><code>power_entity</code></td><td></td><td>Sensor shown at the bottom right, for example power in kW.</td></tr>
+    <tr><td><code>presets</code></td><td><code>[5, 15, 30, 60]</code></td><td>Preset buttons, in minutes. Presets above <code>max_run</code> are hidden.</td></tr>
+    <tr><td><code>max</code></td><td>60</td><td>Minutes represented by a full ring.</td></tr>
+    <tr><td><code>max_run</code></td><td>1440</td><td>Safety cap: the longest allowed run, applied to presets, custom input and extending.</td></tr>
+    <tr><td><code>default</code></td><td>15</td><td>Starting duration. The last used duration is remembered per entity in each browser.</td></tr>
+    <tr><td><code>step</code></td><td>1</td><td>Ring drag step in minutes.</td></tr>
+    <tr><td><code>extend_step</code></td><td>5</td><td>Running buttons are minus step, plus step and plus three steps.</td></tr>
+    <tr><td><code>timer_entity</code></td><td>auto-created</td><td>Reuse your own <code>timer</code> helper. You then own the off automation.</td></tr>
+    <tr><td><code>notify</code></td><td></td><td>A notify service, for example <code>notify.mobile_app_phone</code>, called by the automation when the run ends.</td></tr>
+    <tr><td><code>on_value</code>, <code>off_value</code></td><td>entity max, <code>previous</code></td><td>Number entities only. See below.</td></tr>
+    <tr><td><code>haptics</code></td><td>true</td><td>Vibrate on tap on phones.</td></tr>
+    <tr><td><code>sound</code></td><td>false</td><td>Beep in the browser when finished.</td></tr>
+    <tr><td><code>remember_duration</code></td><td>true</td><td>Remember the last duration.</td></tr>
+  </table>
+
+  <h3>Look</h3>
+  <table>
+    <tr><th>Option</th><th>Default</th><th>Meaning</th></tr>
+    <tr><td><code>theme</code></td><td><code>auto</code></td><td><code>auto</code> follows Home Assistant, or <code>dark</code>, <code>light</code>.</td></tr>
+    <tr><td><code>language</code></td><td><code>auto</code></td><td><code>en</code> or <code>he</code>. Hebrew also switches to right-to-left.</td></tr>
+    <tr><td><code>accent_color</code></td><td><code>#0ea5e9</code></td><td>Bar, knob, active button and glow. Hex string or <code>[r, g, b]</code>.</td></tr>
+    <tr><td><code>text_color</code>, <code>muted_color</code></td><td>theme</td><td>Main and secondary text.</td></tr>
+    <tr><td><code>background</code></td><td>theme</td><td>Any CSS background, solid or gradient.</td></tr>
+    <tr><td><code>border_radius</code></td><td>26</td><td>Corner radius in px.</td></tr>
+    <tr><td><code>arc_width</code></td><td>13.5</td><td>Progress bar thickness.</td></tr>
+    <tr><td><code>ring_size</code></td><td>280</td><td>Maximum ring diameter in px.</td></tr>
+    <tr><td><code>glow</code>, <code>show_rings</code></td><td>true</td><td>Glow effect and the thin ring lines.</td></tr>
+    <tr><td><code>show_header</code>, <code>show_entity_id</code>, <code>show_presets</code>, <code>show_custom</code>, <code>show_extend</code>, <code>show_footer</code>, <code>show_last_run</code></td><td>true</td><td>Show or hide each part of the card.</td></tr>
+  </table>
+
+  <h3>Number entities</h3>
+  <p>For <code>number</code> and <code>input_number</code> the card sets a value while running, then restores it.</p>
+<pre><code>type: custom:timed-switch-card
+entity: number.pump_speed
+on_value: 80          # default: the entity's max
+off_value: previous   # default; or a fixed number such as 0</code></pre>
+  <p><code>previous</code> is the value the entity had when the run started. It is written into the auto-off automation at start, so the restore also happens on the server.</p>
+
+  <h3>Several zones in one card</h3>
+<pre><code>type: custom:timed-switch-card
+entities:
+  - switch.front_lawn
+  - entity: switch.back_lawn
+    name: Back
+    presets: [10, 20, 40]
+accent_color: "#22c55e"   # shared options apply to every zone</code></pre>
+  <p>Multi-zone cards are edited in YAML.</p>
+</section>
+
+<section id="how">
+  <h2>How auto-off works</h2>
+  <p>When an admin presses play for an entity for the first time, the card creates two things in Home Assistant:</p>
+  <ul>
+    <li>a <code>timer</code> helper named <code>timer.tsc_&lt;domain&gt;_&lt;object_id&gt;</code></li>
+    <li>an automation <code>tsc_&lt;domain&gt;_&lt;object_id&gt;</code> that runs the off action when that timer finishes</li>
+  </ul>
+  <p>Pressing play turns the entity on and starts the timer. Extending or shortening restarts the timer with the new remaining time. When the timer finishes, the automation turns the entity off and sends the optional notification. The card only displays the countdown, so closing it changes nothing.</p>
+  <div class="note"><strong>Non-admin users.</strong> They cannot create helpers. Once an admin has pressed play for that entity, they use the existing timer and get the same server-side behavior. Before that, their run is browser-only and the card shows a warning.</div>
+  <p>To remove everything, delete the timer helper and the automation under Settings. The card creates them again next time an admin presses play.</p>
+</section>
+
+<section id="faq">
+  <h2>FAQ</h2>
+  <details><summary>The card says "Custom element doesn't exist"</summary><p>The JavaScript resource is not loaded. Check Settings, Dashboards, Resources for <code>/hacsfiles/timed-switch-card/timed-switch-card.js</code> and hard refresh the browser.</p></details>
+  <details><summary>An amber warning says "Browser-only timer"</summary><p>The run is not backed by a server timer. Either the current user is not an admin and no helper exists yet, or creating the helper failed. Press play once as an admin. The entity will then be turned off by Home Assistant even if the tab closes.</p></details>
+  <details><summary>It turned my entity off when I did not expect it</summary><p>The automation runs whenever the timer finishes. If you reuse a timer with <code>timer_entity</code>, anything else that starts that timer also triggers the off action. Use a timer dedicated to the card.</p></details>
+  <details><summary>The +5m button restarts my timer. Is that a problem?</summary><p>No. Home Assistant's <code>timer.change</code> cannot exceed the timer's original length, so the card restarts the timer with the new remaining time. The finish still fires exactly once.</p></details>
+  <details><summary>Does "Last ran" show runs from other devices?</summary><p>No. It and the remembered duration are stored in the browser that started the run.</p></details>
+  <details><summary>Can I use it with a valve, cover or light?</summary><p>Yes. Valves use open and close, covers use open and close, and everything else uses turn on and turn off.</p></details>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Timed Switch Card is MIT licensed. <a href="https://github.com/bareli/timed-switch-card">Source and issues on GitHub</a>.
+  </div>
+</footer>
+</body>
+</html>
